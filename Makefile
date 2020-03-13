@@ -115,25 +115,25 @@ e2e-test: node_modules
 		echo "config.json not found" && make config-reset
 
 	@echo E2E: Starting the server
-	cd $(BUILD_SERVER_DIR) && $(MAKE) run
+	cd $(BUILD_SERVER_DIR) && $(MAKE) run-server
 
 	@echo E2E: Generating test data
 	cd $(BUILD_SERVER_DIR) && $(MAKE) test-data
 
-	@echo E2E: Running end-to-end testing
-	cd e2e && npm install && npm run cypress:run
+	# @echo E2E: Running end-to-end testing
+	# cd e2e && npm install && npm run cypress:run
 
-	@echo E2E: Stoppping the server
-	cd $(BUILD_SERVER_DIR) && $(MAKE) stop
+	# @echo E2E: Stoppping the server
+	# cd $(BUILD_SERVER_DIR) && $(MAKE) stop
 
-	@echo E2E: stopping mattermost-mysql-e2e
-	docker stop mattermost-mysql-e2e > /dev/null
+	# @echo E2E: stopping mattermost-mysql-e2e
+	# docker stop mattermost-mysql-e2e > /dev/null
 
-	cd $(BUILD_SERVER_DIR) && [[ -f config/config-backup.json ]] && \
-		cp config/config-backup.json config/config.json && echo "revert local config.json" || \
-		echo "config-backup.json not found" && sed -i'' -e 's|"DataSource": ".*"|"DataSource": "mmuser:mostest@tcp(dockerhost:3306)/mattermost_test?charset=utf8mb4,utf8\u0026readTimeout=30s\u0026writeTimeout=30s"|g' config/config.json
+	# cd $(BUILD_SERVER_DIR) && [[ -f config/config-backup.json ]] && \
+	# 	cp config/config-backup.json config/config.json && echo "revert local config.json" || \
+	# 	echo "config-backup.json not found" && sed -i'' -e 's|"DataSource": ".*"|"DataSource": "mmuser:mostest@tcp(dockerhost:3306)/mattermost_test?charset=utf8mb4,utf8\u0026readTimeout=30s\u0026writeTimeout=30s"|g' config/config.json
 
-	@echo E2E: Tests completed
+	# @echo E2E: Tests completed
 
 clean-e2e:
 	@if [ $(shell docker ps -a | grep -ci mattermost-mysql-e2e) -eq 1 ]; then \
